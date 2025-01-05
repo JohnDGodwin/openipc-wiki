@@ -29,9 +29,10 @@ OpenIPC Wiki
 - [Network settings](en/network-settings.md)
 - [Adding a wifi driver to your firmware](en/adding-wifi-driver.md)
 - [Wireless settings](en/wireless-settings.md)
-- [Network perversions](en/network-perversions.md)
 - [System features](en/system-features.md)
 - [Majestic streamer](en/majestic-streamer.md)
+- [Majestic example config](en/majestic-config.md)
+- [Majestic usage research](en/majestic-research.md)
 - [Web interface](en/web-interface.md)
 - [Upgrade firmware](en/sysupgrade.md)
 - [Image quality tuning](en/image-quality-tuning.md)
@@ -43,21 +44,31 @@ OpenIPC Wiki
 - [WiFi XM530](en/wifi-xm530.md)
 - [HomeKit integration](en/homekit-integration.md)
 - [Automatic night mode without light sensor](en/auto-night-mode-without-light-sensor.md)
+- [ZeroTier setup](en/zerotier.md)
 
 ### FPV
 
-- [A Step-by-Step guide to configure an FPV camera and Groundstation](en/A-step-by-step-guide-for-an-FPV-setup.md)
+- [Frequently Asked Question (FAQ) for FPV](en/fpv-faq.md)
+- [General Info](en/fpv-general.md)
+- [OpenIPC AIO "Mario"](en/fpv-openipc-aio-mario.md)
+- [OpenIPC AIO "UltraSight"](en/fpv-openipc-aio-ultrasight.md)
+- [OpenIPC AIO "Thinker"](en/fpv-openipc-aio-thinker.md)
+- [Guide to configure an FPV camera and groundstation](en/fpv-step-by-step-guide.md)
 - [Steps from buy to fly](en/fpv-from-buy-to-fly.md)
 - [OpenIPC as FPV system](en/fpv.md)
 - [Sigmastar FPV devices](en/fpv-sigmastar.md)
+- [OpenIPC Alliance for FPV](en/fpv-openipc-alliance.md)
 - [Ubuntu based groundstation](en/fpv-gs-ubuntu.md)
 - [OrangePI 5 Ubuntu based groundstation](en/fpv-ground-orange_pi5.md)
 - [An Orange Pi 5 minimal VRX for Goggles](en/fpv-orange-pi-5-groundstation.md)
 - [A selection of OpenIPC videos on YouTube](en/fpv-youtube.md)
+- [RunCam WiFiLink based on OpenIPC](en/fpv-runcam-wifilink-openipc.md)
+- [Radxa based groundstation](en/fpv-radxa.md)
+- [The mavfwd tool](en/fpv-mavfwd.md)
 
 ### Troubleshooting
 
-- [Network does not work](en/trouble-network.md)
+- [Network does not work on hi35xx](en/trouble-network-hi35xx.md)
 - [Majestic does not work, camera reboots](en/trouble-majestic.md)
 - [Sigmastar unbrick instructions](en/sigmastar-unbrick.md)
 - [Ingenic T31 unbrick with SD card](en/ingenic-t31-unbrick-with-sd-card.md)
@@ -74,8 +85,9 @@ OpenIPC Wiki
 - [FFMPEG usage](en/dev-ffmpeg-usage.md)
 - [Kernel configuration for adding new platforms](en/integration-kernel.md)
 - [List of supported sensors](en/firmware-sensors.md)
+- [Visual sensor identification](en/visual_sensor_identification.md)
 - [List of OpenIPC Buildroot packages](en/dev-buildroot-packages.md)
-- [Source code](en/source-code.md)
+- [Firmware development guide](en/source-code.md)
 - [Bug reports](https://github.com/OpenIPC/firmware/issues)
 - [Buildroot User Manual](https://buildroot.org/docs.html)
 - [U-Boot Documentation](https://u-boot.readthedocs.io/)
@@ -97,6 +109,7 @@ OpenIPC Wiki
 
 ### Cameras
 
+- [AHD2NET converter](en/device-ahd2net-converter.md)
 - [Chacon IPCAM-RI01](en/device-chacon-ipcam-ri01.md)
 - [Smartwares CIP-37210](en/device-smartwares-cip-37210.md)
 - [Foscam X5](en/device-foscam-x5.md)
@@ -110,6 +123,11 @@ OpenIPC Wiki
 ### Software
 
 - [List of Software for Recording Video](en/software-video-recording.md)
+
+### Packages
+
+- [Vtun](en/package-vtun.md)
+- [WireGuard](en/package-wireguard.md)
 
 ### Subprojects
 
@@ -131,7 +149,7 @@ OpenIPC Wiki
 ### Roadmap
 
 - [ToDo](en/todo-all.md)
-- [Developers](en/developers.md)
+- [Developers](en/contribute.md)
 - [Notes from old sources](en/notes-for-resorting.md)
 
 ### Reference Book
@@ -200,6 +218,6 @@ less familiar with nuts and bolts behind the scene. That is why we set up this
 wiki and let anyone having a GitHub account to make additions and improvements
 to the knowledgebase. Read [How to contribute.](en/contribute.md)
 
-[faq1]: https://github.com/OpenIPC/camerasrnd/blob/master/docs/XM-FAQ-ru.md
+[faq1]: https://github.com/OpenIPC/camerasrnd/blob/master/doc/XM-FAQ-ru.md
 [faq3]: https://alarmsystem-cctv.ru/openipc-%D0%BE%D1%82%D0%BA%D1%80%D1%8B%D1%82%D1%8B%D0%B9-%D0%BA%D0%BE%D0%BB%D0%BB%D0%B5%D0%BA%D1%82%D0%B8%D0%B2/
 [logo]: images/logo_openipc.png

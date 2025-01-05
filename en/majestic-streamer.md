@@ -11,11 +11,24 @@ relation to camera/video surveillance functionality). Majestic is configurable
 via /etc/majestic.yaml file, and has many features/services enabled by default.
 Unneeded options can be switched off for better security and performance. See /etc/majestic.full for configuration options.
 
+### User levels in the system
+
+At the moment, the access has two level in system:
+
+**root** - the main system user, whose name and password are identical when logging into the system via SSH and WEB, there are no restrictions.
+
+**viewer** - a user with limited rights who is denied access via SSH and WEB. The user can only receive RTSP requiring authorization. 
+Update by 2024.11.08 - in the near future we will also give him the ability to watch all media resources available on the WEB port, and also 
+control the /night/toggle switch, but the login to the interface itself will still be prohibited. 
+We might also add a specific path to the directory of scripts that it will be allowed to execute
+```
+adduser viewer -s /bin/false -D -H ; echo viewer:123456 | chpasswd
+```
+
 ### Control signals
 
 ```
 -HUP restart Majestic (Except Ingenic T21).
--SIGUSR1 fast reload (Sigmastar only).
 -SIGUSR2 SDK Shutdown (For all platforms).
 ```
 
@@ -68,7 +81,6 @@ cli -s .nightMode.minThreshold 10
 cli -s .nightMode.maxThreshold 50
 ```
 
-
 ### Motion detection
 
 Motion detect is supported for Hisilion/Goke, Ingenic and Sigmastar.
@@ -83,12 +95,6 @@ Enable motion detection in `majestic` configuration:
 ```
 cli -s .motionDetect.enabled true
 cli -s .motionDetect.debug true
-```
-
-Enable external plugin system:
-
-```
-cli -s .system.plugins true
 ```
 
 Reboot the camera and restart `majestic` in the foreground:
@@ -127,6 +133,28 @@ Examples of other addresses for different services:
 
 We ask that you add information about other popular services here, thank you.
 
+RTMP reconnection and timeout logic works as follows:
+
+```
+    0-200 tries = 10 seconds timeout
+  200-500 tries = 60 seconds timeout
+ 500-1000 tries = 300 seconds timeout
+    1000+ tries = 600 seconds timeout
+```
+
+### Other outgoing options
+
+```
+outgoing:
+  enabled: true
+  server: udp://192.168.1.10:5600
+  naluSize: 1200
+  - udp://IP-1:port
+  - udp://IP-2:port
+  - unix:/tmp/rtpstream.sock
+  - rtmps://dc4-1.rtmp.t.me/s/mykey
+```
+
 ### ONVIF
 
 For basic ONVIF to work correctly, you need to enable it and add a user to the system as shown in the example:
@@ -136,6 +164,10 @@ cli -s .onvif.enabled true
 adduser viewer -s /bin/false -D -H
 echo viewer:123456 | chpasswd
 ```
+
+### JPEG and MJPEG
+
+For the purpose of unification and standardization for all platforms, as well as to increase the stability of the streamer, the image size will always be equal to the size on the Video0 channel and a separate setting is not provided.
 
 ###  ROI
 
@@ -180,9 +212,8 @@ sox speech.mp3 -t raw -r 8000 -e signed -b 16 -c 1 test.pcm
 ### How to play audio file on camera's speaker over network
 
 ```
-cat test.pcm | curl -v -u user:password -H "Content-Type: application/json" -X POST --data-binary @- http://192.168.1.10/play_audio
+curl -u root:12345 --data-binary @test.pcm http://192.168.1.10/play_audio
 ```
-
 
 [aac]: https://en.wikipedia.org/wiki/Advanced_Audio_Coding
 [alaw]: https://en.wikipedia.org/wiki/A-law_algorithm

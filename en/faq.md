@@ -27,7 +27,9 @@ and then look it up in the [FCC ID database](https://fccid.io/).
 - MQTT (telemetry) support
 - WiFi support
 - lame (mp3) and libwebsockets support
+- experimental WebRTC support (only recent Hisi/Goke)
 
+$\color{red}{\text{We always recommend using only Lite firmware}}$
 
 ### How to strip U-Boot Image wrapper header from a binary image
 
@@ -79,7 +81,7 @@ There is _12345_ password by default.
 
 ### How to sign in into camera Web UI?
 
-Open http://<camera_ip_address>:85/ and sign in using default username _root_
+Open http://<camera_ip_address> and sign in using default username _root_
 and default password _12345_. You will be asked to change the password after
 successful login.
 
@@ -103,6 +105,10 @@ For a camera with 16MB flash chip, run
 sf probe 0; sf erase 0xd50000 0x2b0000; reset
 ```
 
+### How to connect to camera with SSH using keys / no password 
+
+See seperate wiki page [here](en/sshusingkeys.md)
+
 ### How to find information about the camera hardware and software?
 
 Sign in on camera via `ssh` and run `ipctool`.
@@ -123,7 +129,7 @@ on the camera afterwards.
 If you need to know what is in the command, search for `ipctool` in the
 `/etc/profile` file.
 
-### How to replace the bootloader from Linux? A dangerous operation for dummies!
+### Replace the bootloader from Linux
 
 Commands are executed separately by each line with a wait for the end of execution.
 The full name of the replacement bootloader and its availability can be checked [here][3]
@@ -131,13 +137,23 @@ The full name of the replacement bootloader and its availability can be checked 
 Before running the commands, don't forget to enter the correct bootloader name!
 
 ```
-export LOADER=u-boot-SOC-TYPE.bin
-curl -k -L -o /tmp/${LOADER} https://github.com/OpenIPC/firmware/releases/download/latest/${LOADER}
-flashcp -v /tmp/${LOADER} /dev/mtd0
+FILE=u-boot-SOC-TYPE.bin
+curl -k -L https://github.com/OpenIPC/firmware/releases/download/latest/${FILE} -o /tmp/${FILE}
+flashcp -v /tmp/${FILE} /dev/mtd0
 flash_eraseall /dev/mtd1
 ```
 
-### How to update the ancient as shit OpenIPC firmware?
+Save wireless credentials:
+```
+FILE=/usr/share/openipc/wireless.sh
+echo "#!/bin/sh" > ${FILE}
+echo "fw_setenv wlandev $(fw_printenv -n wlandev)" >> ${FILE}
+echo "fw_setenv wlanssid $(fw_printenv -n wlanssid)" >> ${FILE}
+echo "fw_setenv wlanpass $(fw_printenv -n wlanpass)" >> ${FILE}
+chmod 755 ${FILE}
+```
+
+### How to update ancient OpenIPC firmware?
 
 Commands are executed separately by each line with a wait for the end of execution.
 The first command updates a utility whose algorithm was changed in February 2023. 
@@ -151,9 +167,7 @@ curl -s https://raw.githubusercontent.com/OpenIPC/firmware/master/general/overla
 
 ### Is it possible to switch from “lite” to “ultimate” via “Over the Air”?
 
-It depends on the board, generally you can try to split the ultimate image to the rootfs and overlay partition and then set the correct partition layout via uboot.
-A 'blind' uboot setup is only supported on sigmastar.
-Otherwise the only way to get it working without accessing uboot is to manually set the correct variables with fw_printenv and fw_setenv.
+On Ingenic and Sigmastar it is possible to split the ultimate rootfs.squashfs and flash it to the rootfs (mtd3) and overlay (mtd4) partition.
 
 ```
 dd if=rootfs.squashfs of=mtd3.bin bs=1k count=5120
@@ -182,36 +196,6 @@ Make sure to use your own IP address and path to the NFS share!
 
 ```bash
 strings dumpfile.bin | grep ^ethaddr
-```
-
-### How to configure ssh session authorization by key
-
-__On the camera__: Sign in into web UI on port 85 of your camera.
-
-```bash
-passwd
-```
-
-__On the desktop__: Copy the public key to the camera by logging in with the
-password created above.
-
-```bash
-ssh-copy-id root@192.168.1.66
-```
-
-__On the camera__: Create a `.ssh` folder in the root user's home directory
-and copy the file with the authorized keystore into it.
-
-```bash
-mkdir ~/.ssh
-cp /etc/dropbear/authorized_keys ~/.ssh/
-```
-
-__On the desktop__: Open a new session to verify that the authorization is
-passed using the public key not requesting a password.
-
-```bash
-ssh root@192.168.1.66
 ```
 
 ### Majestic
@@ -287,7 +271,6 @@ In this case, add `-O` option to the command:
 ```bash
 scp -O ~/myfile root@192.168.1.65:/tmp/
 ```
-
 
 [1]: https://openipc.org/wiki/en/gpio-settings.html
 [2]: https://github.com/OpenIPC/ipctool/releases/download/latest/ipctool
